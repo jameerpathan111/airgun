@@ -37,6 +37,18 @@ class OSCAPContentEntity(BaseEntity):
         view.flash.assert_no_error()
         view.flash.dismiss()
 
+    def download(self, entity_name):
+        """Download corresponding SCAP Content
+
+        :param entity_name: title of the corresponding SCAP Content
+        """
+        view = self.navigate_to(self, 'All')
+        view.search(entity_name)
+        view.table.row(title=entity_name)['Actions'].widget.fill('Download')
+        self.browser.handle_alert()
+        view.flash.assert_no_error()
+        view.flash.dismiss()
+
     def search(self, title):
         """Search for SCAP Content
 
@@ -102,4 +114,4 @@ class EditSCAPContent(NavigateStep):
     def step(self, *args, **kwargs):
         entity_name = kwargs.get('entity_name')
         self.parent.search(entity_name)
-        self.parent.table.row(title=entity_name)['Actions'].widget.fill('Edit')
+        self.parent.table.row(title=entity_name)['Title'].widget.click()
