@@ -2,6 +2,7 @@ from wait_for import wait_for
 
 from airgun.entities.base import BaseEntity
 from airgun.entities.product import ProductEntity
+from airgun.entities.settings import SettingsEntity
 from airgun.navigation import NavigateStep
 from airgun.navigation import navigator
 from airgun.views.product import ProductTaskDetailsView
@@ -14,8 +15,20 @@ from airgun.views.repository import RepositoryPuppetModulesView
 
 class RepositoryEntity(BaseEntity):
 
+    def _find_default_http_proxy(self, values):
+        proxy = SettingsEntity(self.browser)
+        result = proxy.read(property_name='name = content_default_http_proxy')['table'][0]['Value']
+        global_proxy_name = result.split()[0]
+        if result.split()[0] == 'no':
+            values["repo_content.http_proxy_policy"] = 'Global Default (None)'
+        else:
+            values["repo_content.http_proxy_policy"] = 'Global Default ({})'.format(global_proxy_name)
+        return values
+
     def create(self, product_name, values):
         """Create new repository for product"""
+        if values["repo_content.http_proxy_policy"] == "Global Default":
+            values = self._find_default_http_proxy(values)
         view = self.navigate_to(self, 'New', product_name=product_name)
         view.fill(values)
         view.submit.click()
@@ -35,6 +48,8 @@ class RepositoryEntity(BaseEntity):
 
     def update(self, product_name, entity_name, values):
         """Update product repository values"""
+        if values["repo_content.http_proxy_policy"] == "Global Default":
+            values = self._find_default_http_proxy(values)
         view = self.navigate_to(
             self, 'Edit', product_name=product_name, entity_name=entity_name)
         view.fill(values)
@@ -274,3 +289,4 @@ class RepositoryPuppetModules(NavigateStep):
 
     def step(self, *args, **kwargs):
         self.parent.content_counts.row((0, 'Puppet Modules'))[1].widget.click()
+
