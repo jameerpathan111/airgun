@@ -192,6 +192,10 @@ class RepositoryEditView(BaseLoggedInView):
         class NoSpecificHttpProxy(View):
             pass
 
+        @proxy_policy.register('Use specific HTTP Proxy')
+        class SpecificProxyForm(View):
+            http_proxy = Select(locator=".//select[@ng-model='repository.http_proxy_id']")
+
     @repo_content.register('yum')
     class YumRepository(View):
         arch_restrict = EditableEntrySelect(name='Restrict to architecture')
@@ -213,6 +217,10 @@ class RepositoryEditView(BaseLoggedInView):
         class NoSpecificHttpProxy(View):
             pass
 
+        @proxy_policy.register('Use specific HTTP Proxy')
+        class SpecificProxyForm(View):
+            http_proxy = Select(locator=".//select[@ng-model='repository.http_proxy_id']")
+
     @repo_content.register('puppet')
     class PuppetRepository(View):
         upstream_url = EditableEntry(name='Upstream URL')
@@ -232,6 +240,10 @@ class RepositoryEditView(BaseLoggedInView):
         class NoSpecificHttpProxy(View):
             pass
 
+        @proxy_policy.register('Use specific HTTP Proxy')
+        class SpecificProxyForm(View):
+            http_proxy = Select(locator=".//select[@ng-model='repository.http_proxy_id']")
+
     @repo_content.register('ostree')
     class OstreeRepository(View):
         upstream_url = EditableEntry(name='Upstream URL')
@@ -246,6 +258,10 @@ class RepositoryEditView(BaseLoggedInView):
         @proxy_policy.register(True, default=True)
         class NoSpecificHttpProxy(View):
             pass
+
+        @proxy_policy.register('Use specific HTTP Proxy')
+        class SpecificProxyForm(View):
+            http_proxy = Select(locator=".//select[@ng-model='repository.http_proxy_id']")
 
     @property
     def is_displayed(self):
