@@ -15,6 +15,7 @@ class SettingsView(BaseLoggedInView, SearchableViewMixin):
         './/table',
         column_widgets={'Value': PopOverWidget()},
     )
+    column_value = Text(".//span[contains(@class, 'editable')]")
 
     @SatTab.nested
     class Email(SatTab):

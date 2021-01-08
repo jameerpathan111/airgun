@@ -22,6 +22,7 @@ class SettingsEntity(BaseEntity):
         """Update setting property with provided value"""
         view = self.navigate_to(self, 'All')
         view.search(property_name)
+        view.column_value.click()
         view.table.row()['Value'].widget.fill(value)
         view.validations.assert_no_errors()
         view.wait_for_update()
