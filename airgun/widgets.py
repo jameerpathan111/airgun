@@ -2225,3 +2225,24 @@ class AuthSourceAggregateCard(AggregateStatusCard):
             return int(self.browser.text(self.browser.element(self.COUNT)))
         except NoSuchElementException:
             return None
+
+
+class Accordion(View):
+    """PF4 Accordion widget"""
+
+    ROOT = ParametrizedLocator("{@locator}")
+    ITEMS = ".//button[contains(@class, 'pf-c-accordion__toggle')]"
+    ITEM = ".//span[contains(text(), '{}')]"
+
+    def __init__(self, parent=None, id=None, locator=None, logger=None):
+        Widget.__init__(self, parent=parent, logger=logger)
+        if id:
+            self.locator = ".//div[@id={}]".format(quote(id))
+        else:
+            self.locator = locator
+
+    def items(self):
+        return [self.browser.text(elm) for elm in self.browser.elements(self.ITEMS)]
+
+    def toggle(self, value):
+        self.browser.click(self.ITEM.format(value))
