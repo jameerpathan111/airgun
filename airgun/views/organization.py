@@ -3,7 +3,9 @@ from widgetastic.widget import Table
 from widgetastic.widget import Text
 from widgetastic.widget import TextInput
 from widgetastic.widget import View
+from widgetastic.widget import Select
 from widgetastic_patternfly import BreadCrumb
+from widgetastic_patternfly import Button
 
 from airgun.views.common import BaseLoggedInView
 from airgun.views.common import SatVerticalTab
@@ -24,6 +26,16 @@ class OrganizationsView(BaseLoggedInView, SearchableViewMixin):
             'Actions': ActionsDropdown("./div[contains(@class, 'btn-group')]"),
         },
     )
+
+    @property
+    def is_displayed(self):
+        return self.browser.wait_for_element(self.title, exception=False) is not None
+
+
+class OrganizationSelectView(BaseLoggedInView, SearchableViewMixin):
+    title = Text('//h1[text()="Select an Organization"]')
+    organizations = Select(id='organization')
+    select = Button('Select')
 
     @property
     def is_displayed(self):
