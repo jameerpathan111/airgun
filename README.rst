@@ -9,7 +9,7 @@ Airgun
 ======
 
 Airgun is a Python library which is build over `Widgetastic`_ and `navmazing`_
-to make Satellite 6 UI testing easier.
+to make Satellite 6 UI testing easier..
 
 For more info please see `documentation`_.
 
